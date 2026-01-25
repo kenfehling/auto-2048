@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2048 | Automatic</title>
+  <meta name="description"
+    content="The classic 2048 game with the original look and feel, featuring an AI solver and a start-at-tile feature.">
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <div class="title-container">
+        <h1>2048</h1>
+        <p>Play 2048 Game Online</p>
+      </div>
+      <div class="stats-container">
+        <div class="stat-box">
+          <span class="stat-label">Score</span>
+          <span id="score" class="stat-value">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Best</span>
+          <span id="best-score" class="stat-value">0</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="controls">
+      <div class="game-intro">
+        <p>Join the numbers and get to the <strong>2048 tile!</strong></p>
+        <button id="new-game">New Game</button>
+      </div>
+
+      <div class="ai-dashboard">
+        <div class="ai-config">
+          <div class="config-item">
+            <label for="start-tile">Start with:</label>
+            <select id="start-tile">
+              <option value="">Normal</option>
+              <option value="1024">1024</option>
+              <option value="2048">2048</option>
+              <option value="4096">4096</option>
+              <option value="8192">8192</option>
+            </select>
+          </div>
+          <div class="config-item">
+            <label for="ai-speed">AI Speed:</label>
+            <input type="range" id="ai-speed" min="10" max="20" step="1" value="15">
+            <span id="speed-value">Speed 15</span>
+          </div>
+        </div>
+        <button id="ai-toggle">Start AI</button>
+      </div>
+    </div>
+
+    <div class="game-container" id="game-container">
+      <div class="grid-background">
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+      </div>
+      <div id="tile-container" class="tile-container"></div>
+
+      <div id="status-overlay" class="status-overlay">
+        <h2 id="status-message">Game Over!</h2>
+        <div class="overlay-controls">
+          <button id="retry-button">Try Again</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p><b>HOW TO PLAY:</b> Use your <b>arrow keys</b> to move the tiles. When two tiles with the same number touch,
+        they <b>merge into one!</b></p>
+      <p>Or enable <b>AI Mode</b> to watch the expectimax solver reach for 2048 and beyond.</p>
+    </div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
