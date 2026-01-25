@@ -169,7 +169,7 @@ class GameManager {
     this.tileElements.clear();
     this.updateUI();
     if (this.aiRunning) {
-      this.startAI();
+      this.requestMove();
     }
   }
 
