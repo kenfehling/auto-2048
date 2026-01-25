@@ -17,9 +17,6 @@ export class AI {
     const startTime = Date.now();
     let bestMove = -1;
     let depth = 1;
-    const emptyCount = game.grid.flat().filter(c => c === null).length;
-    // Smooth linear mapping: Depth 6 when empty=16, up to Depth 14 when empty=0
-    const maxDepth = Math.round(14 - (emptyCount * 0.5));
 
     // Iterative Deepening within 80ms to keep animations perfectly smooth
     while (Date.now() - startTime < 80) {
@@ -28,7 +25,7 @@ export class AI {
         bestMove = result.move;
       }
       depth++;
-      if (depth > maxDepth) break;
+      if (depth > 8) break;
     }
 
     // Safety move if logic fails (rare)
