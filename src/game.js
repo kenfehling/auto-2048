@@ -4,7 +4,6 @@ export class Game {
     this.grid = Array(size).fill().map(() => Array(size).fill(null));
     this.score = 0;
     this.over = false;
-    this.won = false;
     this.nextId = 1;
     this.setup();
   }
@@ -105,7 +104,6 @@ export class Game {
             this.grid[r][targetC - 1] = mergedTile;
             this.grid[r][c] = null;
             this.score += val;
-            if (val === 2048) this.won = true;
             moved = true;
             // The column before this one is now the limit for further merges in this move
             lastFreeColumn = targetC;
@@ -173,7 +171,6 @@ export class Game {
       grid: this.grid.map(row => row.map(cell => cell ? ({ ...cell }) : null)),
       score: this.score,
       over: this.over,
-      won: this.won,
       nextId: this.nextId
     };
   }
@@ -183,7 +180,6 @@ export class Game {
     game.grid = state.grid.map(row => row.map(cell => cell ? ({ ...cell }) : null));
     game.score = state.score;
     game.over = state.over;
-    game.won = state.won;
     game.nextId = state.nextId;
     return game;
   }

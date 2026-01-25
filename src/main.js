@@ -227,7 +227,7 @@ class GameManager {
     if (this.aiRunning) return;
 
     // Auto-restart if game is over
-    if (this.game.over || this.game.won) {
+    if (this.game.over) {
       this.restart();
     }
 
