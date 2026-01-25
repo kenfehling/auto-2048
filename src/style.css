@@ -305,7 +305,7 @@ button:hover {
 }
 
 .tile-4096 {
-  background: #fe3d3d;
+  background: #3c3a32;
   color: #f9f6f2;
 }
 
@@ -409,17 +409,35 @@ button:hover {
 .footer b {
   color: var(--text-dark);
 }
+
 .github-corner:hover .octo-arm {
   animation: octocat-wave 560ms ease-in-out;
 }
 
 @keyframes octocat-wave {
-  0%, 100% { transform: rotate(0); }
-  20%, 60% { transform: rotate(-25deg); }
-  40%, 80% { transform: rotate(10deg); }
+
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+
+  20%,
+  60% {
+    transform: rotate(-25deg);
+  }
+
+  40%,
+  80% {
+    transform: rotate(10deg);
+  }
 }
 
 @media (max-width:500px) {
-  .github-corner:hover .octo-arm { animation: none; }
-  .github-corner .octo-arm { animation: octocat-wave 560ms ease-in-out; }
+  .github-corner:hover .octo-arm {
+    animation: none;
+  }
+
+  .github-corner .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+  }
 }
