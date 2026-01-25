@@ -87,6 +87,48 @@ class GameManager {
     this.speedSlider.addEventListener('input', () => {
       this.speedDisplay.textContent = `Speed ${this.speedSlider.value}`;
     });
+
+    this.initTouchEvents();
+  }
+
+  initTouchEvents() {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const gameContainer = document.getElementById('game-container');
+
+    gameContainer.addEventListener('touchstart', (e) => {
+      if (this.aiRunning) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    gameContainer.addEventListener('touchend', (e) => {
+      if (this.aiRunning) return;
+      if (!touchStartX || !touchStartY) return;
+
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+
+      const dx = touchEndX - touchStartX;
+      const dy = touchEndY - touchStartY;
+
+      const absDx = Math.abs(dx);
+      const absDy = Math.abs(dy);
+
+      if (Math.max(absDx, absDy) > 30) {
+        // Move 0: Up, 1: Right, 2: Down, 3: Left
+        let moved = false;
+        if (absDx > absDy) {
+          moved = this.game.move(dx > 0 ? 1 : 3);
+        } else {
+          moved = this.game.move(dy > 0 ? 2 : 0);
+        }
+        if (moved) this.handleMove();
+      }
+
+      touchStartX = 0;
+      touchStartY = 0;
+    }, { passive: true });
   }
 
   handleMove() {

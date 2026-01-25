@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 :root {
   --bg-color: #faf8ef;
   --container-bg: #bbada0;
@@ -7,6 +11,12 @@
   --grid-gap: 15px;
   --tile-radius: 3px;
   --transition-speed: 100ms;
+}
+
+@media (max-width: 450px) {
+  :root {
+    --grid-gap: 8px;
+  }
 }
 
 body {
@@ -22,8 +32,10 @@ body {
 }
 
 #app {
-  width: 500px;
-  padding: 0 20px;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 10px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
 }
@@ -33,19 +45,33 @@ header {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  margin-top: 10px;
 }
 
 .title-container h1 {
   margin: 0;
-  font-size: 80px;
+  font-size: 40px;
   font-weight: bold;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
+}
+
+@media (min-width: 450px) {
+  .title-container h1 {
+    font-size: 80px;
+    letter-spacing: -2px;
+  }
 }
 
 .title-container p {
   margin: 0;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: bold;
+}
+
+@media (min-width: 450px) {
+  .title-container p {
+    font-size: 18px;
+  }
 }
 
 .stats-container {
@@ -55,16 +81,23 @@ header {
 
 .stat-box {
   background: var(--container-bg);
-  padding: 5px 20px;
+  padding: 4px 10px;
   border-radius: 3px;
   text-align: center;
-  min-width: 60px;
+  min-width: 40px;
   color: white;
+}
+
+@media (min-width: 450px) {
+  .stat-box {
+    padding: 5px 20px;
+    min-width: 60px;
+  }
 }
 
 .stat-label {
   display: block;
-  font-size: 13px;
+  font-size: 9px;
   text-transform: uppercase;
   color: #eee4da;
   font-weight: bold;
@@ -72,8 +105,18 @@ header {
 
 .stat-value {
   display: block;
-  font-size: 25px;
+  font-size: 16px;
   font-weight: bold;
+}
+
+@media (min-width: 450px) {
+  .stat-label {
+    font-size: 13px;
+  }
+
+  .stat-value {
+    font-size: 25px;
+  }
 }
 
 .controls {
@@ -84,29 +127,53 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .game-intro p {
   margin: 0;
-  font-size: 18px;
+  font-size: 14px;
   line-height: 1.4;
+}
+
+@media (min-width: 450px) {
+  .game-intro p {
+    font-size: 18px;
+  }
 }
 
 .ai-dashboard {
   background: var(--container-bg);
-  padding: 15px;
+  padding: 10px;
   border-radius: 6px;
   display: flex;
+  flex-direction: column;
+  gap: 10px;
   justify-content: space-between;
   align-items: center;
   color: white;
   margin-bottom: 20px;
 }
 
+@media (min-width: 450px) {
+  .ai-dashboard {
+    flex-direction: row;
+    padding: 15px;
+  }
+}
+
 .ai-config {
   display: flex;
-  gap: 20px;
+  gap: 15px;
+  width: 100%;
+  justify-content: space-around;
+}
+
+@media (min-width: 450px) {
+  .ai-config {
+    width: auto;
+    gap: 20px;
+  }
 }
 
 .config-item {
@@ -116,7 +183,7 @@ header {
 }
 
 .config-item label {
-  font-size: 13px;
+  font-size: 11px;
   text-transform: uppercase;
   font-weight: bold;
 }
@@ -138,11 +205,17 @@ header {
 .config-item input[type="range"] {
   cursor: pointer;
   accent-color: #8f7a66;
-  width: 120px;
+  width: 100px;
+}
+
+@media (min-width: 450px) {
+  .config-item input[type="range"] {
+    width: 120px;
+  }
 }
 
 #speed-value {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
 }
 
@@ -150,12 +223,19 @@ button {
   background: #8f7a66;
   color: var(--text-light);
   border: none;
-  padding: 10px 20px;
+  padding: 10px 15px;
   border-radius: 3px;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
   white-space: nowrap;
+}
+
+@media (min-width: 450px) {
+  button {
+    padding: 10px 20px;
+    font-size: 18px;
+  }
 }
 
 button:hover {
@@ -164,6 +244,13 @@ button:hover {
 
 #ai-toggle {
   background: #f67c5f;
+  width: 100%;
+}
+
+@media (min-width: 450px) {
+  #ai-toggle {
+    width: auto;
+  }
 }
 
 #ai-toggle:hover {
@@ -178,8 +265,9 @@ button:hover {
   position: relative;
   background: var(--container-bg);
   border-radius: 6px;
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
   padding: var(--grid-gap);
   box-sizing: border-box;
   touch-action: none;
@@ -223,9 +311,15 @@ button:hover {
 }
 
 .tile-inner {
-  font-size: 55px;
+  font-size: 35px;
   width: 100%;
   text-align: center;
+}
+
+@media (min-width: 450px) {
+  .tile-inner {
+    font-size: 55px;
+  }
 }
 
 /* Tile Colors */
@@ -265,7 +359,13 @@ button:hover {
 }
 
 .tile-128 .tile-inner {
-  font-size: 40px;
+  font-size: 25px;
+}
+
+@media (min-width: 450px) {
+  .tile-128 .tile-inner {
+    font-size: 40px;
+  }
 }
 
 .tile-256 {
@@ -273,8 +373,9 @@ button:hover {
   color: #f9f6f2;
 }
 
-.tile-256 .tile-inner {
-  font-size: 40px;
+.tile-256 .tile-inner,
+.tile-512 .tile-inner {
+  font-size: 25px;
 }
 
 .tile-512 {
@@ -282,8 +383,12 @@ button:hover {
   color: #f9f6f2;
 }
 
-.tile-512 .tile-inner {
-  font-size: 40px;
+@media (min-width: 450px) {
+
+  .tile-256 .tile-inner,
+  .tile-512 .tile-inner {
+    font-size: 40px;
+  }
 }
 
 .tile-1024 {
@@ -291,8 +396,11 @@ button:hover {
   color: #f9f6f2;
 }
 
-.tile-1024 .tile-inner {
-  font-size: 30px;
+.tile-1024 .tile-inner,
+.tile-2048 .tile-inner,
+.tile-4096 .tile-inner,
+.tile-8192 .tile-inner {
+  font-size: 20px;
 }
 
 .tile-2048 {
@@ -300,17 +408,9 @@ button:hover {
   color: #f9f6f2;
 }
 
-.tile-2048 .tile-inner {
-  font-size: 30px;
-}
-
 .tile-4096 {
   background: #3c3a32;
   color: #f9f6f2;
-}
-
-.tile-4096 .tile-inner {
-  font-size: 30px;
 }
 
 .tile-8192 {
@@ -318,8 +418,14 @@ button:hover {
   color: #f9f6f2;
 }
 
-.tile-8192 .tile-inner {
-  font-size: 30px;
+@media (min-width: 450px) {
+
+  .tile-1024 .tile-inner,
+  .tile-2048 .tile-inner,
+  .tile-4096 .tile-inner,
+  .tile-8192 .tile-inner {
+    font-size: 30px;
+  }
 }
 
 .tile-super {
@@ -328,7 +434,13 @@ button:hover {
 }
 
 .tile-super .tile-inner {
-  font-size: 25px;
+  font-size: 15px;
+}
+
+@media (min-width: 450px) {
+  .tile-super .tile-inner {
+    font-size: 25px;
+  }
 }
 
 .tile-new {
@@ -388,9 +500,15 @@ button:hover {
 }
 
 .status-overlay h2 {
-  font-size: 60px;
+  font-size: 40px;
   color: #776e65;
   margin-bottom: 20px;
+}
+
+@media (min-width: 450px) {
+  .status-overlay h2 {
+    font-size: 60px;
+  }
 }
 
 .overlay-controls {
@@ -401,9 +519,15 @@ button:hover {
 .footer {
   text-align: left;
   color: var(--text-dark);
-  font-size: 18px;
+  font-size: 14px;
   line-height: 1.6;
   margin-top: 30px;
+}
+
+@media (min-width: 450px) {
+  .footer {
+    font-size: 18px;
+  }
 }
 
 .footer b {
@@ -439,5 +563,12 @@ button:hover {
 
   .github-corner .octo-arm {
     animation: octocat-wave 560ms ease-in-out;
+  }
+}
+
+@media (max-width: 450px) {
+  .github-corner svg {
+    width: 60px !important;
+    height: 60px !important;
   }
 }
