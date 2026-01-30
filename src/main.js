@@ -123,7 +123,9 @@ class GameManager {
 
   async loadStrategyCode(strategyName) {
     try {
-      const response = await fetch(`/src/strategies/${strategyName}.dsl`);
+      const response = await fetch(
+        `${import.meta.env.BASE_URL}strategies/${strategyName}.dsl`
+      );
       const code = await response.text();
       this.strategyCodeTextarea.value = code;
     } catch (error) {

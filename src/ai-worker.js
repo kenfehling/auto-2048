@@ -9,7 +9,9 @@ let currentStrategy = 'snake'; // default
 // Initialize AI with strategy
 async function initializeAI(strategyName = 'snake') {
   try {
-    const response = await fetch(`/src/strategies/${strategyName}.dsl`);
+    const response = await fetch(
+      `${import.meta.env.BASE_URL}strategies/${strategyName}.dsl`
+    );
     const strategyText = await response.text();
     ai = new AI(strategyText);
     isInitialized = true;
