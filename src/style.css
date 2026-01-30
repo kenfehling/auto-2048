@@ -40,6 +40,12 @@ body {
   flex-direction: column;
 }
 
+@media (min-width: 900px) {
+  #app {
+    max-width: 900px;
+  }
+}
+
 header {
   display: flex;
   justify-content: space-between;
@@ -159,6 +165,13 @@ header {
   .ai-dashboard {
     flex-direction: row;
     padding: 15px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 900px) {
+  .ai-dashboard {
+    padding: 15px 25px;
   }
 }
 
@@ -167,12 +180,21 @@ header {
   gap: 15px;
   width: 100%;
   justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 @media (min-width: 450px) {
   .ai-config {
     width: auto;
-    gap: 20px;
+    gap: 15px;
+    flex: 1;
+    justify-content: flex-start;
+  }
+}
+
+@media (min-width: 900px) {
+  .ai-config {
+    gap: 30px;
   }
 }
 
@@ -570,5 +592,133 @@ button:hover {
   .github-corner svg {
     width: 60px !important;
     height: 60px !important;
+  }
+}
+
+/* Main Layout for side-by-side */
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+@media (min-width: 900px) {
+  .main-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .game-container {
+    flex: 0 0 480px;
+  }
+
+  .strategy-viewer {
+    flex: 1;
+    margin-bottom: 0;
+  }
+}
+
+/* Strategy Viewer */
+.strategy-viewer {
+  margin-bottom: 20px;
+}
+
+.toggle-code-btn {
+  width: 100%;
+  background: #8f7a66;
+  color: var(--text-light);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.toggle-code-btn:hover {
+  background: #7f6a56;
+}
+
+@media (min-width: 900px) {
+  .toggle-code-btn {
+    display: none;
+  }
+}
+
+#toggle-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  font-size: 12px;
+}
+
+#toggle-icon.expanded {
+  transform: rotate(90deg);
+}
+
+.code-panel {
+  max-height: 400px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  margin-top: 10px;
+}
+
+.code-panel.collapsed {
+  max-height: 0;
+  margin-top: 0;
+}
+
+@media (min-width: 900px) {
+  .code-panel.collapsed {
+    max-height: 500px;
+    margin-top: 0;
+  }
+
+  .code-panel {
+    max-height: 500px;
+  }
+}
+
+#strategy-code {
+  width: 100%;
+  height: 350px;
+  padding: 12px;
+  border: 2px solid var(--container-bg);
+  border-radius: 3px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  background: #f5f5f5;
+  color: #333;
+  resize: none;
+  box-sizing: border-box;
+}
+
+@media (min-width: 900px) {
+  #strategy-code {
+    height: 480px;
+    /* Match game-container height approximately */
+    border: none;
+    background: #fdfdfd;
+  }
+}
+
+@media (min-width: 450px) {
+  .toggle-code-btn {
+    font-size: 16px;
+  }
+
+  #strategy-code {
+    font-size: 13px;
+    height: 400px;
+  }
+
+  .code-panel {
+    max-height: 450px;
   }
 }

@@ -51,6 +51,14 @@
       <div class="ai-dashboard">
         <div class="ai-config">
           <div class="config-item">
+            <label for="strategy-select">AI Strategy:</label>
+            <select id="strategy-select">
+              <option value="snake">Snake Pattern</option>
+              <option value="merge_focused">Merge-Focused</option>
+              <option value="corner">Corner-Weight</option>
+            </select>
+          </div>
+          <div class="config-item">
             <label for="start-tile">Start with:</label>
             <select id="start-tile">
               <option value="">Normal</option>
@@ -70,31 +78,43 @@
       </div>
     </div>
 
-    <div class="game-container" id="game-container">
-      <div class="grid-background">
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-      </div>
-      <div id="tile-container" class="tile-container"></div>
+    <div class="main-layout">
+      <div class="game-container" id="game-container">
+        <div class="grid-background">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+        <div id="tile-container" class="tile-container"></div>
 
-      <div id="status-overlay" class="status-overlay">
-        <h2 id="status-message">Game Over!</h2>
-        <div class="overlay-controls">
-          <button id="retry-button">Try Again</button>
+        <div id="status-overlay" class="status-overlay">
+          <h2 id="status-message">Game Over!</h2>
+          <div class="overlay-controls">
+            <button id="retry-button">Try Again</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collapsible strategy code viewer -->
+      <div class="strategy-viewer">
+        <button id="toggle-code" class="toggle-code-btn">
+          <span id="toggle-icon">▶</span> View Strategy Code
+        </button>
+        <div id="code-panel" class="code-panel collapsed">
+          <textarea id="strategy-code" readonly spellcheck="false"></textarea>
         </div>
       </div>
     </div>

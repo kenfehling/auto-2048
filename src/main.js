@@ -29,9 +29,17 @@ class GameManager {
     this.retryBtn = document.getElementById('retry-button');
     this.speedSlider = document.getElementById('ai-speed');
     this.speedDisplay = document.getElementById('speed-value');
+    this.strategySelector = document.getElementById('strategy-select');
+    this.toggleCodeBtn = document.getElementById('toggle-code');
+    this.toggleIcon = document.getElementById('toggle-icon');
+    this.codePanel = document.getElementById('code-panel');
+    this.strategyCodeTextarea = document.getElementById('strategy-code');
 
     this.bestScoreElement.textContent = this.bestScore;
     this.speedDisplay.textContent = `Speed ${this.speedSlider.value}`;
+
+    // Load initial strategy code
+    this.loadStrategyCode(this.strategySelector.value);
   }
 
   initWorker() {
@@ -88,7 +96,66 @@ class GameManager {
       this.speedDisplay.textContent = `Speed ${this.speedSlider.value}`;
     });
 
+    this.strategySelector.addEventListener('change', () => {
+      this.loadStrategyCode(this.strategySelector.value);
+      this.reloadAIWorker();
+    });
+
+    this.toggleCodeBtn.addEventListener('click', () => {
+      this.toggleCodePanel();
+    });
+
     this.initTouchEvents();
+  }
+
+  toggleCodePanel() {
+    const isCollapsed = this.codePanel.classList.contains('collapsed');
+    if (isCollapsed) {
+      this.codePanel.classList.remove('collapsed');
+      this.toggleIcon.classList.add('expanded');
+      this.toggleCodeBtn.innerHTML = '<span id="toggle-icon" class="expanded">▶</span> Hide Strategy Code';
+    } else {
+      this.codePanel.classList.add('collapsed');
+      this.toggleIcon.classList.remove('expanded');
+      this.toggleCodeBtn.innerHTML = '<span id="toggle-icon">▶</span> View Strategy Code';
+    }
+  }
+
+  async loadStrategyCode(strategyName) {
+    try {
+      const response = await fetch(`/src/strategies/${strategyName}.dsl`);
+      const code = await response.text();
+      this.strategyCodeTextarea.value = code;
+    } catch (error) {
+      this.strategyCodeTextarea.value = `// Error loading strategy: ${error.message}`;
+    }
+  }
+
+  reloadAIWorker() {
+    // Terminate existing worker
+    this.aiWorker.terminate();
+
+    // Create new worker with selected strategy
+    const strategyName = this.strategySelector.value;
+    this.aiWorker = new Worker(
+      new URL('./ai-worker.js', import.meta.url),
+      { type: 'module' }
+    );
+
+    // Pass strategy name to worker
+    this.aiWorker.postMessage({
+      type: 'LOAD_STRATEGY',
+      strategyName
+    });
+
+    // Re-init worker message handler
+    this.initWorker();
+
+    // If AI is running, restart it with new strategy
+    if (this.aiRunning) {
+      this.stopAI();
+      setTimeout(() => this.startAI(), 100);
+    }
   }
 
   initTouchEvents() {
