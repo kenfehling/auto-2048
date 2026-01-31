@@ -16,6 +16,7 @@ async function initializeAI(strategyName = 'snake') {
     ai = new AI(strategyText);
     isInitialized = true;
     currentStrategy = strategyName;
+    console.log(`✅ Worker: Loaded ${strategyName} strategy`);
 
     // Process any pending requests
     while (pendingRequests.length > 0) {
@@ -23,7 +24,7 @@ async function initializeAI(strategyName = 'snake') {
       processRequest(request);
     }
   } catch (error) {
-    console.error('Failed to load strategy:', error);
+    console.error(`❌ Worker: Failed to load ${strategyName} strategy:`, error);
     // Fallback to hardcoded strategy
     ai = new AI();
     isInitialized = true;

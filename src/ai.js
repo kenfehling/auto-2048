@@ -27,6 +27,11 @@ export class AI {
 
     // Create evaluator function from DSL
     this.evaluator = this.strategy.createEvaluator();
+    
+    // Log for debugging
+    if (typeof window !== 'undefined') {
+      console.log('✅ AI: Loaded DSL strategy with', this.strategy.config.components.length, 'components');
+    }
   }
 
   loadFallbackStrategy() {
@@ -36,6 +41,11 @@ export class AI {
     this.pruningStrategy = 'top_3_cells';
     this.fallbackOrder = [0, 3, 1, 2];
     this.evaluator = null; // Will use legacy evaluate method
+    
+    // Log for debugging
+    if (typeof window !== 'undefined') {
+      console.log('⚠️ AI: Using hardcoded fallback strategy');
+    }
   }
 
   getNextMove(game) {
