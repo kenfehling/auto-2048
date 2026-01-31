@@ -1,7 +1,6 @@
 // MERGE-FOCUSED STRATEGY
 //
-// Non-positional strategy that prioritizes creating merge opportunities
-// over maintaining specific tile positions. Completely different from snake!
+// Non-positional strategy that prioritizes creating merge opportunities over maintaining specific tile positions. Completely different from snake!
 
 SEARCH {
   max_time: 80ms

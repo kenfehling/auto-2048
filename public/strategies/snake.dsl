@@ -1,7 +1,6 @@
 // SNAKE PATTERN STRATEGY
 //
-// Classic 2048 strategy that keeps tiles in a monotonic decreasing order
-// along a snake-like path, with the largest tile in the top-left corner.
+// Classic 2048 strategy that keeps tiles in a monotonic decreasing order along a snake-like path, with the largest tile in the top-left corner.
 
 SEARCH {
   max_time: 80ms
