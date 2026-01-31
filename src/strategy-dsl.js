@@ -177,6 +177,7 @@ export class StrategyDSL {
 
   createEvaluator() {
     const components = this.config.components;
+    const executeComponent = this.executeComponent.bind(this);
 
     return (game) => {
       const grid = game.grid;
@@ -187,7 +188,7 @@ export class StrategyDSL {
       }
 
       for (const component of components) {
-        const score = this.executeComponent(component, game, grid);
+        const score = executeComponent(component, game, grid);
         totalScore += score;
       }
 

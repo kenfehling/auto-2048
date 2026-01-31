@@ -9,18 +9,7 @@ export class AI {
     if (strategyText) {
       this.loadStrategy(strategyText);
     } else {
-      // Use default strategy if none provided
-      this.loadDefaultStrategy();
-    }
-  }
-
-  async loadDefaultStrategy() {
-    try {
-      const response = await fetch('/src/strategy.dsl');
-      const strategyText = await response.text();
-      this.loadStrategy(strategyText);
-    } catch (error) {
-      console.error('Failed to load strategy.dsl, using hardcoded defaults:', error);
+      // Use default hardcoded snake strategy
       this.loadFallbackStrategy();
     }
   }
