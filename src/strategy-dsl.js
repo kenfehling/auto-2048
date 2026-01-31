@@ -8,6 +8,7 @@ export class StrategyDSL {
   constructor(dslText) {
     this.dslText = dslText;
     this.config = this.parse(dslText);
+    this.expressionCache = new Map(); // Cache compiled expressions
   }
 
   parse(text) {
@@ -140,21 +141,30 @@ export class StrategyDSL {
   evaluateExpression(expr, vars) {
     if (typeof expr !== 'string') return expr;
 
-    expr = expr.replace(/\^/g, '**');
-
-    for (const [key, value] of Object.entries(vars)) {
-      expr = expr.replace(new RegExp(`\\b${key}\\b`, 'g'), value);
+    // Check cache first
+    const cacheKey = expr;
+    let compiledFn = this.expressionCache.get(cacheKey);
+    
+    if (!compiledFn) {
+      // Compile expression once: replace ^ with ** and create function
+      const normalized = expr.replace(/\^/g, '**');
+      const varNames = Object.keys(vars);
+      const varValues = varNames.map(k => vars[k]);
+      
+      try {
+        // Create a function that takes variables as parameters
+        // This is much faster than eval() on every call
+        // eslint-disable-next-line no-new-func
+        compiledFn = new Function(...varNames, `const abs = Math.abs, max = Math.max, min = Math.min, log2 = Math.log2, sqrt = Math.sqrt; return ${normalized};`);
+        this.expressionCache.set(cacheKey, compiledFn);
+      } catch (e) {
+        console.error('Error compiling expression:', expr, e);
+        return 0;
+      }
     }
 
-    const abs = Math.abs;
-    const max = Math.max;
-    const min = Math.min;
-    const log2 = Math.log2;
-    const sqrt = Math.sqrt;
-
     try {
-      // eslint-disable-next-line no-eval
-      return eval(expr);
+      return compiledFn(...Object.values(vars));
     } catch (e) {
       console.error('Error evaluating expression:', expr, e);
       return 0;
