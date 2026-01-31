@@ -2,9 +2,6 @@
 //
 // Classic 2048 strategy that keeps tiles in a monotonic decreasing order
 // along a snake-like path, with the largest tile in the top-left corner.
-//
-// Performance: High scores, consistent 2048+ tiles
-// Playstyle: Positional, methodical, corner-focused
 
 SEARCH {
   max_time: 80ms

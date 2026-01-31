@@ -2,10 +2,6 @@
 //
 // Non-positional strategy that prioritizes creating merge opportunities
 // over maintaining specific tile positions. Completely different from snake!
-//
-// Performance: Moderate scores, more chaotic gameplay
-// Playstyle: Opportunistic, merge-driven, flexible
-// Key Difference: Doesn't care WHERE tiles are, only WHAT they can merge with
 
 SEARCH {
   max_time: 80ms

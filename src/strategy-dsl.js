@@ -83,14 +83,20 @@ export class StrategyDSL {
         remainingText.substring(block.index + block.fullMatch.length);
     }
 
-    // Parse simple key-value pairs
-    const lines = remainingText.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('//'));
-    for (const line of lines) {
-      const colonIndex = line.indexOf(':');
-      if (colonIndex === -1) continue;
+    // Parse key-value pairs, handling multi-line values
+    // Remove comments and split by colons that are at the start of a key
+    const cleanText = remainingText.split('\n').map(l => {
+      const commentIndex = l.indexOf('//');
+      return commentIndex === -1 ? l : l.substring(0, commentIndex);
+    }).join('\n');
 
-      const key = line.substring(0, colonIndex).trim();
-      const value = line.substring(colonIndex + 1).trim();
+    // Match pattern: key: value (where value can span multiple lines until next key or end)
+    const keyValueRegex = /(\w+)\s*:\s*([^\n]*(?:\n(?!\s*\w+\s*:)[^\n]*)*)/g;
+    let kvMatch;
+    
+    while ((kvMatch = keyValueRegex.exec(cleanText)) !== null) {
+      const key = kvMatch[1].trim();
+      const value = kvMatch[2].trim();
 
       if (key && value) {
         result[key] = this.parseValue(value);
@@ -106,7 +112,8 @@ export class StrategyDSL {
   }
 
   parseValue(value) {
-    value = value.replace(/[,;]$/, '');
+    // Clean up trailing punctuation and whitespace
+    value = value.replace(/[,;]\s*$/, '').trim();
 
     if (value.endsWith('ms')) {
       return parseInt(value);
@@ -114,7 +121,9 @@ export class StrategyDSL {
 
     if (value.startsWith('[')) {
       try {
-        return JSON.parse(value);
+        // Handle multi-line arrays by removing all newlines and extra whitespace
+        const jsonString = value.replace(/\n\s*/g, '');
+        return JSON.parse(jsonString);
       } catch (e) {
         console.error('Failed to parse array:', value);
         return value;

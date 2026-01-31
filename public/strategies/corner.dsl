@@ -2,10 +2,6 @@
 //
 // Positional strategy using a weight grid instead of a monotonic path.
 // Prefers corners and edges over center positions.
-//
-// Performance: Good scores, balanced gameplay
-// Playstyle: Positional but more flexible than snake
-// Key Difference: Uses 2D weights instead of 1D path ordering
 
 SEARCH {
   max_time: 80ms
