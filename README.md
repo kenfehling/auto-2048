@@ -1,6 +1,6 @@
-2048 that plays itself automatically using a simple strategy.
+2048 that plays itself automatically using strategies written in a DSL
 
-Vibe-coded one Saturday afternoon with Google Antigravity
+Vibe-coded with Google Antigravity
 
 ## Demo
 https://kenfehling.github.io/auto-2048/
