@@ -222,9 +222,6 @@ export class StrategyDSL {
 
       for (const component of allComponents) {
         const score = executeComponent(component, game, grid);
-        if (typeof window !== 'undefined' && window.debugDSL) {
-          console.log(`  Component ${component.name}: +${score}`);
-        }
         totalScore += score;
       }
 
