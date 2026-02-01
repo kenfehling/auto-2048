@@ -13,5 +13,19 @@ COMPONENT position_weights {
   formula: value^2 * weight * 1e4
 }
 
+COMPONENT empty_cells {
+  formula: count * 1e8
+}
+
+COMPONENT smoothness {
+  formula: smoothness * 1e2
+}
+
+SEARCH {
+  max_depth: 8
+  pruning: top_3_cells
+}
+
 MOVES {
   fallback_order: [0, 3, 1, 2]
+}

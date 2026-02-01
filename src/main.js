@@ -166,7 +166,7 @@ class GameManager {
     );
 
     // Calculate absolute base URL to pass to worker
-    const baseUrl = new URL(import.meta.env.BASE_URL, window.location.origin).href;
+    const baseUrl = new URL(import.meta.env.BASE_URL, window.location.href).href;
 
     // Pass strategy name and base URL to worker
     this.aiWorker.postMessage({
