@@ -210,6 +210,9 @@ export class StrategyDSL {
       }
     ];
     
+    // Log component details for debugging
+    console.log(`📋 DSL: Initialized with components:`, allComponents.map(c => c.name).join(', '));
+
     const executeComponent = this.executeComponent.bind(this);
 
     return (game) => {
@@ -223,6 +226,11 @@ export class StrategyDSL {
       for (const component of allComponents) {
         const score = executeComponent(component, game, grid);
         totalScore += score;
+        
+        // Detailed component logging behind debug flag
+        if (self.debugLogging && !game.isSimulating) {
+           console.log(`  - 🧩 ${component.name}: ${score.toLocaleString()}`);
+        }
       }
 
       return totalScore;

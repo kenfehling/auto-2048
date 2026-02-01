@@ -5,6 +5,7 @@ let ai = null;
 let isInitialized = false;
 let pendingRequests = [];
 let currentStrategy = 'snake'; // default
+self.debugLogging = true; // Set to true to see detailed component scores in terminal/console
 let debugLogging = true; // Toggle with: self.debugLogging = true in console
 
 // Initialize AI with strategy
@@ -46,6 +47,33 @@ function processRequest(data) {
     ai.maxTime = maxTimeMs;
     
     const move = ai.getNextMove(game);
+    
+    // Log all 4 move scores with component breakdown (only if enabled)
+    if (self.debugLogging) {
+      const scores = [0, 1, 2, 3].map(m => {
+        const sim = Game.fromState(game.serialize());
+        sim.isSimulating = false; // We WANT logging for this evaluation
+        const moved = sim.move(m, true);
+        if (!moved) {
+          console.log(`\n🚫 Move ${m} (Up,Right,Down,Left[${m}]): NOT POSSIBLE`);
+          return null;
+        }
+        
+        const origEmpty = game.grid.flat().filter(t => !t).length;
+        const newEmpty = sim.grid.flat().filter(t => !t).length;
+        console.log(`\n🔍 Evaluating Move ${m}: (empty: ${origEmpty} -> ${newEmpty})`);
+        
+        return ai.evaluate(sim);
+      });
+      
+      console.log('\n🎯 Final Scores Summary:', {
+        0: scores[0],
+        1: scores[1],
+        2: scores[2],
+        3: scores[3],
+        chosen: move
+      });
+    }
     
     const moveData = {
       move: move,

@@ -97,7 +97,7 @@ export class AI {
   }
 
   expectimax(game, depth, isPlayerTurn) {
-    // Note: depth included in hash for correctness
+    game.isSimulating = true;
     const hash = this.hashGrid(game.grid) + "|" + depth + "|" + isPlayerTurn;
     if (this.transpositionTable.has(hash)) return this.transpositionTable.get(hash);
 
@@ -157,6 +157,8 @@ export class AI {
   evaluate(game) {
     // Use DSL-based evaluator if available
     if (this.evaluator) {
+      // Ensure we don't log during sim unless explicitly requested
+      if (game.isSimulating === undefined) game.isSimulating = true;
       return this.evaluator(game);
     }
 
