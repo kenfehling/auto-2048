@@ -2,11 +2,6 @@
 //
 // Positional strategy using a weight grid instead of a monotonic path. Prefers corners and edges over center positions.
 
-SEARCH {
-  max_depth: 8
-  pruning: top_3_cells
-}
-
 // Position weights: corners best, edges good, center worst
 COMPONENT position_weights {
   weights: [
@@ -18,16 +13,5 @@ COMPONENT position_weights {
   formula: value^2 * weight * 1e4
 }
 
-// Reward empty cells
-COMPONENT empty_cells {
-  formula: count * 1e4
-}
-
-// Reward smoothness
-COMPONENT smoothness {
-  formula: smoothness * 5
-}
-
 MOVES {
   fallback_order: [0, 3, 1, 2]
-}

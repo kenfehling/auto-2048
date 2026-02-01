@@ -13,15 +13,21 @@ export class StrategyDSL {
 
   parse(text) {
     const config = {
-      search: {},
+      search: {
+        max_depth: 8,
+        pruning: 'top_3_cells'
+      },
       components: [],
       moves: {}
     };
 
-    // Parse SEARCH block
+    // Parse SEARCH block (optional, merges with defaults)
     const searchMatch = text.match(/SEARCH\s*\{([^}]+)\}/s);
     if (searchMatch) {
-      config.search = this.parseSimpleBlock(searchMatch[1]);
+      config.search = {
+        ...config.search,
+        ...this.parseSimpleBlock(searchMatch[1])
+      };
     }
 
     // Parse COMPONENT blocks (can have multiple)
@@ -188,6 +194,22 @@ export class StrategyDSL {
 
   createEvaluator() {
     const components = this.config.components;
+    
+    // Add default components that are always applied
+    const allComponents = [
+      ...components,
+      // Default empty cells reward
+      {
+        name: 'empty_cells',
+        config: { formula: 'count * 1e4' }
+      },
+      // Default smoothness reward
+      {
+        name: 'smoothness',
+        config: { formula: 'smoothness * 1' }
+      }
+    ];
+    
     const executeComponent = this.executeComponent.bind(this);
 
     return (game) => {
@@ -198,7 +220,7 @@ export class StrategyDSL {
         return -1e30;
       }
 
-      for (const component of components) {
+      for (const component of allComponents) {
         const score = executeComponent(component, game, grid);
         totalScore += score;
       }
