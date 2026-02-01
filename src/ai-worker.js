@@ -50,7 +50,14 @@ function processRequest(data) {
     if (debugLogging) {
       const scores = [0, 1, 2, 3].map(m => {
         const sim = Game.fromState(game.serialize());
-        if (!sim.move(m, true)) return null;
+        const moved = sim.move(m, true);
+        if (!moved) return null;
+        
+        // Log what happened to the board
+        const origEmpty = game.grid.flat().filter(t => !t).length;
+        const newEmpty = sim.grid.flat().filter(t => !t).length;
+        console.log(`  Move ${m}: moved=${moved}, original empty=${origEmpty}, after=${newEmpty}`);
+        
         return ai.evaluate(sim);
       });
       
