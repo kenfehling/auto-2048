@@ -141,19 +141,18 @@ export class StrategyDSL {
   evaluateExpression(expr, vars) {
     if (typeof expr !== 'string') return expr;
 
-    // Check cache first
-    const cacheKey = expr;
+    // Extract and sort variable names for consistent parameter order
+    const varNames = Object.keys(vars).sort();
+    const cacheKey = expr + '|' + varNames.join(','); // Include var signature in cache key
+    
     let compiledFn = this.expressionCache.get(cacheKey);
     
     if (!compiledFn) {
-      // Compile expression once: replace ^ with ** and create function
+      // Compile expression once with sorted parameter names for consistency
       const normalized = expr.replace(/\^/g, '**');
-      const varNames = Object.keys(vars);
-      const varValues = varNames.map(k => vars[k]);
       
       try {
-        // Create a function that takes variables as parameters
-        // This is much faster than eval() on every call
+        // Create a function with sorted parameter names to ensure consistent order
         // eslint-disable-next-line no-new-func
         compiledFn = new Function(...varNames, `const abs = Math.abs, max = Math.max, min = Math.min, log2 = Math.log2, sqrt = Math.sqrt; return ${normalized};`);
         this.expressionCache.set(cacheKey, compiledFn);
@@ -164,7 +163,9 @@ export class StrategyDSL {
     }
 
     try {
-      return compiledFn(...Object.values(vars));
+      // Call with values in the same sorted order as the function parameters
+      const values = varNames.map(name => vars[name]);
+      return compiledFn(...values);
     } catch (e) {
       console.error('Error evaluating expression:', expr, e);
       return 0;
