@@ -97,7 +97,8 @@ export class AI {
   }
 
   expectimax(game, depth, isPlayerTurn) {
-    const hash = this.hashGrid(game.grid) + depth + isPlayerTurn;
+    // Note: depth included in hash for correctness
+    const hash = this.hashGrid(game.grid) + "|" + depth + "|" + isPlayerTurn;
     if (this.transpositionTable.has(hash)) return this.transpositionTable.get(hash);
 
     if (depth === 0 || game.over) {

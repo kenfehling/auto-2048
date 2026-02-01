@@ -15,17 +15,17 @@ COMPONENT position_weights {
     [20, 5, 2, 1],
     [10, 2, 1, 0.5]
   ]
-  formula: value^2 * weight * 1e10
+  formula: value^2 * weight * 1e4
 }
 
 // Reward empty cells
 COMPONENT empty_cells {
-  formula: count * 1e12
+  formula: count * 1e4
 }
 
 // Reward smoothness
 COMPONENT smoothness {
-  formula: smoothness * 5e3
+  formula: smoothness * 5
 }
 
 MOVES {

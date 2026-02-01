@@ -5,6 +5,7 @@ let ai = null;
 let isInitialized = false;
 let pendingRequests = [];
 let currentStrategy = 'snake'; // default
+let debugLogging = false; // Toggle with: self.debugLogging = true in console
 
 // Initialize AI with strategy
 async function initializeAI(strategyName = 'snake') {
@@ -43,9 +44,29 @@ function processRequest(data) {
     const maxTimeMs = speedFactor === 15 ? 20 : Math.max(30, (16 - speedFactor) * 30);
     ai.maxTime = maxTimeMs;
     
+    const move = ai.getNextMove(game);
+    
+    // Log all 4 move scores with full precision for debugging (only if enabled)
+    if (debugLogging) {
+      const scores = [0, 1, 2, 3].map(m => {
+        const sim = Game.fromState(game.serialize());
+        if (!sim.move(m, true)) return null;
+        return ai.evaluate(sim);
+      });
+      
+      console.log('🎯 All move scores:', {
+        0: scores[0]?.toFixed(20),
+        1: scores[1]?.toFixed(20),
+        2: scores[2]?.toFixed(20),
+        3: scores[3]?.toFixed(20),
+        chosen: move,
+        directions: { 0: 'Up', 1: 'Right', 2: 'Down', 3: 'Left' }
+      });
+    }
+    
     // Capture diagnostic info
     const moveData = {
-      move: ai.getNextMove(game),
+      move: move,
       config: {
         maxTime: ai.maxTime,
         maxDepth: ai.maxDepth,

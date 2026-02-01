@@ -9,22 +9,22 @@ SEARCH {
 
 // Heavily reward tiles that have matching neighbors
 COMPONENT merge_potential {
-  formula: value * matches * 1e10
+  formula: value * matches * 1e4
 }
 
 // Reward the maximum tile value (but not its position)
 COMPONENT max_tile {
-  formula: max_value^2 * 1e8
+  formula: max_value^2 * 1e2
 }
 
 // Heavily reward empty spaces to maintain flexibility
 COMPONENT empty_cells {
-  formula: count * 5e12
+  formula: count * 1e4
 }
 
 // Small bonus for keeping high tiles in corners (any corner)
 COMPONENT corner_bonus {
-  formula: value^2 * 1e9
+  formula: value^2 * 1e3
 }
 
 MOVES {
