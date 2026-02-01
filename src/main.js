@@ -144,7 +144,7 @@ class GameManager {
 
   async loadStrategyCode(strategyName) {
     try {
-      const strategiesUrl = new URL(`strategies/${strategyName}.dsl`, window.location.href).href;
+      const strategiesUrl = new URL(`strategies/${strategyName}.dsl`, new URL(import.meta.env.BASE_URL, window.location.origin)).href;
       const response = await fetch(strategiesUrl);
       const code = await response.text();
       this.strategyCodeTextarea.value = code;
@@ -164,9 +164,8 @@ class GameManager {
       { type: 'module' }
     );
 
-    // Calculate base URL using URL constructor for proper relative resolution
-    // This will correctly handle both dev and prod environments
-    const baseUrl = new URL('./', window.location.href).href;
+    // Use Vite's BASE_URL which is configured per environment
+    const baseUrl = new URL(import.meta.env.BASE_URL, window.location.origin).href;
 
     // Pass strategy name and base URL to worker
     this.aiWorker.postMessage({
