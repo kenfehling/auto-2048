@@ -19,8 +19,8 @@ export class AI {
     const searchConfig = this.strategy.getSearchConfig();
     const movesConfig = this.strategy.getMovesConfig();
 
-    // Extract configuration
-    this.maxTime = searchConfig.maxTime;
+    // Extract configuration (maxTime will be set dynamically by worker based on speed)
+    this.maxTime = 80; // Default, will be overridden
     this.maxDepth = searchConfig.maxDepth;
     this.pruningStrategy = searchConfig.pruning;
     this.fallbackOrder = movesConfig.fallbackOrder;

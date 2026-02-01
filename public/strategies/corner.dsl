@@ -3,7 +3,6 @@
 // Positional strategy using a weight grid instead of a monotonic path. Prefers corners and edges over center positions.
 
 SEARCH {
-  max_time: 80ms
   max_depth: 8
   pruning: top_3_cells
 }

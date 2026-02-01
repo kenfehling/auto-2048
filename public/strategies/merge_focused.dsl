@@ -3,7 +3,6 @@
 // Non-positional strategy that prioritizes creating merge opportunities over maintaining specific tile positions. Completely different from snake!
 
 SEARCH {
-  max_time: 80ms
   max_depth: 7
   pruning: top_3_cells
 }

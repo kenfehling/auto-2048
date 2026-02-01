@@ -32,10 +32,16 @@ async function initializeAI(strategyName = 'snake') {
 }
 
 function processRequest(data) {
-  const { type, gameData, strategyName } = data;
+  const { type, gameData, strategyName, speedFactor } = data;
 
   if (type === 'GET_MOVE') {
     const game = Game.fromState(gameData);
+    
+    // Compute maxTime from speed factor (slower speed = more time to think)
+    // Speed 15 (fastest): 10ms delay, 20ms think time
+    // Speed 1 (slowest): 570ms delay, 400ms think time
+    const maxTimeMs = speedFactor === 15 ? 20 : Math.max(30, (16 - speedFactor) * 30);
+    ai.maxTime = maxTimeMs;
     
     // Capture diagnostic info
     const moveData = {
@@ -45,7 +51,8 @@ function processRequest(data) {
         maxDepth: ai.maxDepth,
         pruning: ai.pruningStrategy,
         usesEvaluator: !!ai.evaluator,
-        strategy: currentStrategy
+        strategy: currentStrategy,
+        speedFactor: speedFactor
       }
     };
     

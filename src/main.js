@@ -83,9 +83,11 @@ class GameManager {
 
   requestMove() {
     if (!this.aiRunning) return;
+    const speedFactor = parseInt(this.speedSlider.value);
     this.aiWorker.postMessage({
       type: 'GET_MOVE',
-      gameData: this.game.serialize()
+      gameData: this.game.serialize(),
+      speedFactor: speedFactor
     });
   }
 
