@@ -144,8 +144,9 @@ class GameManager {
 
   async loadStrategyCode(strategyName) {
     try {
+      const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
       const response = await fetch(
-        `${import.meta.env.BASE_URL}strategies/${strategyName}.dsl`
+        `${baseUrl}strategies/${strategyName}.dsl`
       );
       const code = await response.text();
       this.strategyCodeTextarea.value = code;
@@ -165,8 +166,9 @@ class GameManager {
       { type: 'module' }
     );
 
-    // Calculate absolute base URL to pass to worker
-    const baseUrl = new URL(import.meta.env.BASE_URL, window.location.href).href;
+    // Calculate base URL to pass to worker  
+    // Just use the current page's origin and path
+    const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
 
     // Pass strategy name and base URL to worker
     this.aiWorker.postMessage({
