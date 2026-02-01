@@ -144,8 +144,9 @@ class GameManager {
 
   async loadStrategyCode(strategyName) {
     try {
+      const baseUrl = window.location.origin + window.location.pathname;
       const response = await fetch(
-        `./strategies/${strategyName}.dsl`
+        `${baseUrl}strategies/${strategyName}.dsl`
       );
       const code = await response.text();
       this.strategyCodeTextarea.value = code;
@@ -165,10 +166,16 @@ class GameManager {
       { type: 'module' }
     );
 
-    // Pass strategy name to worker - let worker use relative paths
+    // Calculate base URL that includes subpath for production
+    // In dev: window.location.pathname = '/', result = 'http://localhost:5174/'
+    // In prod: window.location.pathname = '/auto-2048/', result = 'https://kenfehling.github.io/auto-2048/'
+    const baseUrl = window.location.origin + window.location.pathname;
+
+    // Pass strategy name and base URL to worker
     this.aiWorker.postMessage({
       type: 'LOAD_STRATEGY',
-      strategyName
+      strategyName,
+      baseUrl: baseUrl
     });
 
     // Re-init worker message handler
