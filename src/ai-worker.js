@@ -9,10 +9,10 @@ let currentBaseUrl = '/'; // Track base URL for reloads
 self.debugLogging = false; // Toggle with: self.debugLogging = true in console
 
 // Initialize AI with strategy
-async function initializeAI(strategyName = 'snake', baseUrl = null) {
-  if (baseUrl) currentBaseUrl = baseUrl;
+async function initializeAI(strategyName = 'snake') {
   try {
-    const url = `${currentBaseUrl}strategies/${strategyName}.dsl`;
+    // Use relative URL - works in both dev and prod
+    const url = `./strategies/${strategyName}.dsl`;
     console.log(`🤖 Worker: Fetching strategy from ${url}`);
     
     const response = await fetch(url);
@@ -46,7 +46,7 @@ async function initializeAI(strategyName = 'snake', baseUrl = null) {
 }
 
 function processRequest(data) {
-  const { type, gameData, strategyName, speedFactor, baseUrl } = data;
+  const { type, gameData, strategyName, speedFactor } = data;
 
   if (type === 'GET_MOVE') {
     if (!isInitialized) {
@@ -103,7 +103,7 @@ function processRequest(data) {
   } else if (type === 'LOAD_STRATEGY') {
     console.log('🤖 Worker: Loading strategy:', strategyName);
     isInitialized = false;
-    initializeAI(strategyName, baseUrl);
+    initializeAI(strategyName);
   }
 }
 
