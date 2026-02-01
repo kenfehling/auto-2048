@@ -72,6 +72,17 @@ export class AI {
       }
     }
 
+    // Debug: log move decision info on first move
+    if (typeof window !== 'undefined' && window.logMoves !== false && !window.moveLogged) {
+      window.moveLogged = true;
+      const evals = [0,1,2,3].map(m => {
+        const sim = Game.fromState(game.serialize());
+        if (!sim.move(m, true)) return null;
+        return this.evaluate(sim);
+      }).filter(x => x !== null);
+      console.log('🎮 First move:', bestMove, 'Scores:', evals.map(s => s.toExponential(2)));
+    }
+
     return bestMove;
   }
 
@@ -149,6 +160,9 @@ export class AI {
     }
 
     // Legacy fallback evaluation
+    if (typeof window !== 'undefined' && window.logEvalPath) {
+      console.log('⚠️ Using hardcoded evaluate path');
+    }
     return this.legacyEvaluate(game);
   }
 

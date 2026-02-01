@@ -36,8 +36,20 @@ function processRequest(data) {
 
   if (type === 'GET_MOVE') {
     const game = Game.fromState(gameData);
-    const move = ai.getNextMove(game);
-    self.postMessage({ move });
+    
+    // Capture diagnostic info
+    const moveData = {
+      move: ai.getNextMove(game),
+      config: {
+        maxTime: ai.maxTime,
+        maxDepth: ai.maxDepth,
+        pruning: ai.pruningStrategy,
+        usesEvaluator: !!ai.evaluator,
+        strategy: currentStrategy
+      }
+    };
+    
+    self.postMessage(moveData);
   } else if (type === 'LOAD_STRATEGY') {
     // Reload with new strategy
     isInitialized = false;

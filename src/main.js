@@ -43,8 +43,22 @@ class GameManager {
   }
 
   initWorker() {
+    this.moveCount = 0;
     this.aiWorker.onmessage = (e) => {
-      const { move } = e.data;
+      const { move, config } = e.data;
+      
+      // Log diagnostics on first move
+      if (config && this.moveCount === 0) {
+        console.log('🎮 Worker Config:', {
+          maxTime: config.maxTime,
+          maxDepth: config.maxDepth,
+          pruning: config.pruning,
+          usesEvaluator: config.usesEvaluator,
+          strategy: config.strategy
+        });
+      }
+      this.moveCount++;
+      
       if (this.aiRunning && move !== -1) {
         this.game.move(move);
         this.handleMove();
@@ -268,6 +282,7 @@ class GameManager {
   }
 
   restart() {
+    this.moveCount = 0; // Reset diagnostics for new game
     const startVal = this.startTileSelector.value;
     this.game = new Game();
     if (startVal) {
