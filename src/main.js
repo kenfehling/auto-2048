@@ -45,17 +45,11 @@ class GameManager {
   initWorker() {
     this.moveCount = 0;
     this.aiWorker.onmessage = (e) => {
-      const { move, config } = e.data;
+      const { move, debug } = e.data;
       
       // Log diagnostics on first move
-      if (config && this.moveCount === 0) {
-        console.log('🎮 Worker Config:', {
-          maxTime: config.maxTime,
-          maxDepth: config.maxDepth,
-          pruning: config.pruning,
-          usesEvaluator: config.usesEvaluator,
-          strategy: config.strategy
-        });
+      if (debug && this.moveCount === 0) {
+        console.log('📋 Strategy:', debug);
       }
       this.moveCount++;
       

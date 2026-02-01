@@ -36,57 +36,30 @@ function processRequest(data) {
   const { type, gameData, strategyName, speedFactor } = data;
 
   if (type === 'GET_MOVE') {
-    const game = Game.fromState(gameData);
+    if (!isInitialized) {
+      pendingRequests.push(data);
+      return;
+    }
     
-    // Compute maxTime from speed factor (slower speed = more time to think)
-    // Speed 15 (fastest): 10ms delay, 20ms think time
-    // Speed 1 (slowest): 570ms delay, 400ms think time
+    const game = Game.fromState(gameData);
     const maxTimeMs = speedFactor === 15 ? 20 : Math.max(30, (16 - speedFactor) * 30);
     ai.maxTime = maxTimeMs;
     
     const move = ai.getNextMove(game);
     
-    // Log all 4 move scores with full precision for debugging (only if enabled)
-    if (debugLogging) {
-      const scores = [0, 1, 2, 3].map(m => {
-        const sim = Game.fromState(game.serialize());
-        const moved = sim.move(m, true);
-        if (!moved) return null;
-        
-        // Log what happened to the board
-        const origEmpty = game.grid.flat().filter(t => !t).length;
-        const newEmpty = sim.grid.flat().filter(t => !t).length;
-        console.log(`  Move ${m}: moved=${moved}, original empty=${origEmpty}, after=${newEmpty}`);
-        
-        return ai.evaluate(sim);
-      });
-      
-      console.log('🎯 All move scores:', {
-        0: scores[0]?.toFixed(20),
-        1: scores[1]?.toFixed(20),
-        2: scores[2]?.toFixed(20),
-        3: scores[3]?.toFixed(20),
-        chosen: move,
-        directions: { 0: 'Up', 1: 'Right', 2: 'Down', 3: 'Left' }
-      });
-    }
-    
-    // Capture diagnostic info
     const moveData = {
       move: move,
-      config: {
+      debug: {
         maxTime: ai.maxTime,
         maxDepth: ai.maxDepth,
         pruning: ai.pruningStrategy,
-        usesEvaluator: !!ai.evaluator,
         strategy: currentStrategy,
-        speedFactor: speedFactor
+        hasEvaluator: !!ai.evaluator
       }
     };
     
     self.postMessage(moveData);
   } else if (type === 'LOAD_STRATEGY') {
-    // Reload with new strategy
     isInitialized = false;
     initializeAI(strategyName);
   }
@@ -94,11 +67,10 @@ function processRequest(data) {
 
 self.onmessage = (e) => {
   if (!isInitialized && e.data.type !== 'LOAD_STRATEGY') {
-    // Queue the request until initialization is complete
     pendingRequests.push(e.data);
     return;
   }
   processRequest(e.data);
 };
 
-// Initialize with default strategy
+initializeAI();
