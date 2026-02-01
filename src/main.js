@@ -45,11 +45,14 @@ class GameManager {
   initWorker() {
     this.moveCount = 0;
     
+    // Calculate absolute base URL to pass to worker
+    const baseUrl = new URL(import.meta.env.BASE_URL, window.location.origin).href;
+    
     // Send initial strategy load with baseUrl
     this.aiWorker.postMessage({
       type: 'LOAD_STRATEGY',
       strategyName: this.strategySelector ? this.strategySelector.value : 'snake',
-      baseUrl: import.meta.env.BASE_URL
+      baseUrl: baseUrl
     });
 
     this.aiWorker.onmessage = (e) => {
@@ -162,11 +165,14 @@ class GameManager {
       { type: 'module' }
     );
 
+    // Calculate absolute base URL to pass to worker
+    const baseUrl = new URL(import.meta.env.BASE_URL, window.location.origin).href;
+
     // Pass strategy name and base URL to worker
     this.aiWorker.postMessage({
       type: 'LOAD_STRATEGY',
       strategyName,
-      baseUrl: import.meta.env.BASE_URL
+      baseUrl: baseUrl
     });
 
     // Re-init worker message handler
