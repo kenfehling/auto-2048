@@ -5,7 +5,7 @@ let ai = null;
 let isInitialized = false;
 let pendingRequests = [];
 let currentStrategy = 'snake'; // default
-let debugLogging = false; // Toggle with: self.debugLogging = true in console
+let debugLogging = true; // Toggle with: self.debugLogging = true in console
 
 // Initialize AI with strategy
 async function initializeAI(strategyName = 'snake') {
