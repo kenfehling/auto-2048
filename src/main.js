@@ -144,7 +144,9 @@ class GameManager {
 
   async loadStrategyCode(strategyName) {
     try {
-      const baseUrl = window.location.origin + window.location.pathname;
+      const currentUrl = new URL(window.location.href);
+      const basePath = currentUrl.pathname.endsWith('/') ? currentUrl.pathname : currentUrl.pathname.substring(0, currentUrl.pathname.lastIndexOf('/') + 1);
+      const baseUrl = currentUrl.origin + basePath;
       const response = await fetch(
         `${baseUrl}strategies/${strategyName}.dsl`
       );
@@ -167,9 +169,10 @@ class GameManager {
     );
 
     // Calculate base URL that includes subpath for production
-    // In dev: window.location.pathname = '/', result = 'http://localhost:5174/'
-    // In prod: window.location.pathname = '/auto-2048/', result = 'https://kenfehling.github.io/auto-2048/'
-    const baseUrl = window.location.origin + window.location.pathname;
+    // Extract directory from current URL to ensure we get the subpath
+    const currentUrl = new URL(window.location.href);
+    const basePath = currentUrl.pathname.endsWith('/') ? currentUrl.pathname : currentUrl.pathname.substring(0, currentUrl.pathname.lastIndexOf('/') + 1);
+    const baseUrl = currentUrl.origin + basePath;
 
     // Pass strategy name and base URL to worker
     this.aiWorker.postMessage({
