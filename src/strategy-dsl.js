@@ -12,6 +12,10 @@ export class StrategyDSL {
   }
 
   parse(text) {
+    if (!text || !text.includes('COMPONENT')) {
+      console.warn('⚠️ Strategy text appears invalid or empty (missing COMPONENT block)');
+    }
+
     const config = {
       search: {
         max_depth: 8,
@@ -33,12 +37,20 @@ export class StrategyDSL {
     // Parse COMPONENT blocks (can have multiple)
     const componentRegex = /COMPONENT\s+(\w+)\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/gs;
     let match;
+    let foundComponents = 0;
     while ((match = componentRegex.exec(text)) !== null) {
       const [, name, content] = match;
+      foundComponents++;
       config.components.push({
         name,
         config: this.parseComponentBlock(content)
       });
+    }
+
+    if (foundComponents === 0) {
+      console.warn('⚠️ No components were parsed from the strategy text!');
+    } else {
+      console.log(`📋 DSL: Parsed ${foundComponents} components: ${config.components.map(c => c.name).join(', ')}`);
     }
 
     // Parse MOVES block
@@ -128,11 +140,11 @@ export class StrategyDSL {
 
     if (value.startsWith('[')) {
       try {
-        // Handle multi-line arrays by removing all newlines and extra whitespace
-        const jsonString = value.replace(/\n\s*/g, '');
+        // Handle multi-line arrays by removing all whitespace including \r\n
+        const jsonString = value.replace(/\s+/g, '');
         return JSON.parse(jsonString);
       } catch (e) {
-        console.error('Failed to parse array:', value);
+        console.error('Failed to parse array:', value, e);
         return value;
       }
     }

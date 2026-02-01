@@ -5,16 +5,28 @@ let ai = null;
 let isInitialized = false;
 let pendingRequests = [];
 let currentStrategy = 'snake'; // default
-self.debugLogging = true; // Set to true to see detailed component scores in terminal/console
-let debugLogging = true; // Toggle with: self.debugLogging = true in console
+let currentBaseUrl = '/'; // Track base URL for reloads
+self.debugLogging = false; // Toggle with: self.debugLogging = true in console
 
 // Initialize AI with strategy
-async function initializeAI(strategyName = 'snake') {
+async function initializeAI(strategyName = 'snake', baseUrl = null) {
+  if (baseUrl) currentBaseUrl = baseUrl;
   try {
-    const response = await fetch(
-      `${import.meta.env.BASE_URL}strategies/${strategyName}.dsl`
-    );
+    const url = `${currentBaseUrl}strategies/${strategyName}.dsl`;
+    console.log(`🤖 Worker: Fetching strategy from ${url}`);
+    
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     const strategyText = await response.text();
+    console.log(`🤖 Worker: Received ${strategyText.length} bytes of strategy text`);
+    
+    if (strategyText.trim().startsWith('<!DOCTYPE') || strategyText.includes('<html')) {
+       throw new Error('Received HTML instead of DSL! Strategy file might be missing or path is wrong.');
+    }
+
     ai = new AI(strategyText);
     isInitialized = true;
     currentStrategy = strategyName;
@@ -34,7 +46,7 @@ async function initializeAI(strategyName = 'snake') {
 }
 
 function processRequest(data) {
-  const { type, gameData, strategyName, speedFactor } = data;
+  const { type, gameData, strategyName, speedFactor, baseUrl } = data;
 
   if (type === 'GET_MOVE') {
     if (!isInitialized) {
@@ -82,14 +94,16 @@ function processRequest(data) {
         maxDepth: ai.maxDepth,
         pruning: ai.pruningStrategy,
         strategy: currentStrategy,
-        hasEvaluator: !!ai.evaluator
+        hasEvaluator: !!ai.evaluator,
+        numComponents: ai.strategy ? ai.strategy.config.components.length : 0
       }
     };
     
     self.postMessage(moveData);
   } else if (type === 'LOAD_STRATEGY') {
+    console.log('🤖 Worker: Loading strategy:', strategyName);
     isInitialized = false;
-    initializeAI(strategyName);
+    initializeAI(strategyName, baseUrl);
   }
 }
 
@@ -100,5 +114,3 @@ self.onmessage = (e) => {
   }
   processRequest(e.data);
 };
-
-initializeAI();

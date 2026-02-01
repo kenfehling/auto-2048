@@ -44,6 +44,14 @@ class GameManager {
 
   initWorker() {
     this.moveCount = 0;
+    
+    // Send initial strategy load with baseUrl
+    this.aiWorker.postMessage({
+      type: 'LOAD_STRATEGY',
+      strategyName: this.strategySelector ? this.strategySelector.value : 'snake',
+      baseUrl: import.meta.env.BASE_URL
+    });
+
     this.aiWorker.onmessage = (e) => {
       const { move, debug } = e.data;
       
@@ -154,10 +162,11 @@ class GameManager {
       { type: 'module' }
     );
 
-    // Pass strategy name to worker
+    // Pass strategy name and base URL to worker
     this.aiWorker.postMessage({
       type: 'LOAD_STRATEGY',
-      strategyName
+      strategyName,
+      baseUrl: import.meta.env.BASE_URL
     });
 
     // Re-init worker message handler
