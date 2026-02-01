@@ -96,10 +96,9 @@ self.onmessage = (e) => {
   if (!isInitialized && e.data.type !== 'LOAD_STRATEGY') {
     // Queue the request until initialization is complete
     pendingRequests.push(e.data);
-  } else {
-    processRequest(e.data);
+    return;
   }
+  processRequest(e.data);
 };
 
-// Start initialization with default strategy
-initializeAI();
+// Initialize with default strategy
